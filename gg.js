@@ -256,14 +256,32 @@
           <div class="gallery-grid">
             ${paginatedPaintings.map(painting => `
               <div class="art-card">
-                <div class="card-image">
-                  <img src="${painting.image}" alt="${escapeHtml(painting.title)}" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'100%25\' height=\'100%25\' viewBox=\'0 0 100 100\'%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'%23333333\'/%3E%3Ctext x=\'50%25\' y=\'50%25\' dominant-baseline=\'middle\' text-anchor=\'middle\' fill=\'%23ffffff\' font-size=\'14\'%3E🎨%3C/text%3E%3C/svg%3E';">
+                  <div class="card-image">
+                    <img src="${painting.image}" alt="${escapeHtml(painting.title)}" loading="lazy">
+                  </div>
+                  <div class="card-content">
+                    <div class="content-flex-wrapper">
+                      <div class="text-container">
+                        <div class="text-wrapper">
+                          <div class="state-default">
+                            <div class="painting-title">${escapeHtml(painting.title)}</div>
+                            <div class="painting-year">${painting.year}</div>
+                          </div>
+                          <div class="state-hover">
+                            <div class="painting-title uppercase">${escapeHtml(painting.artist)}</div>
+                            <div class="painting-year uppercase">${escapeHtml(painting.location)}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="mobile-arrow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="card-content">
-                  <div class="painting-title para-medium-16">${escapeHtml(painting.title)}</div>
-                  <div class="painting-year para-light-14">${painting.year}</div>
-                </div>
-              </div>
             `).join('')}
           </div>
           <div class="pag">
