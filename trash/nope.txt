@@ -1,0 +1,32 @@
+            <div class="accordion-body years-inputs">
+              <input type="number" placeholder="From" value="${state.filters.yearFrom}" oninput="state.filters.yearFrom = this.value">
+              <input type="number" placeholder="To" value="${state.filters.yearTo}" oninput="state.filters.yearTo = this.value">
+            </div>
+
+
+              <div class="select-container">
+                  <div class="filter-select-trigger ${state.filters.location ? 'active-selected' : ''}" onclick="window.toggleSelectMenu(this)">
+                      <span>${escapeHtml(locationDisplay)}</span>
+                      <div class="arrow-icon"></div>
+                  </div>
+                  <div class="filter-options-list">
+                      <div class="filter-option" onclick="app.setFilter('location', '')">All locations</div>
+                      ${allLocations.map(loc => `
+                          <div class="filter-option" onclick="app.setFilter('location', '${escapeHtml(loc)}')">${escapeHtml(loc)}</div>
+                      `).join('')}
+                  </div>
+              </div>
+
+
+              <div class="select-container">
+                <div class="filter-select-trigger ${state.filters.artist ? 'active-selected' : ''}" onclick="window.toggleSelectMenu(this)">
+                    <span>${escapeHtml(artistDisplay)}</span>
+                    <div class="arrow-icon"></div>
+                  </div>
+                  <div class="filter-options-list">
+                    <div class="filter-option" onclick="app.setFilter('artist', '')">All artists</div>
+                    ${allArtists.map(artist => `
+                        <div class="filter-option" onclick="app.setFilter('artist', '${escapeHtml(artist)}')">${escapeHtml(artist)}</div>
+                    `).join('')}
+                </div>
+              </div>
