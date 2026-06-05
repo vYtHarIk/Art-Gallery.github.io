@@ -10,104 +10,70 @@ const escapeHtml = (str) => {
   });
 };
 
-const DecorativePagination = ({ currentPage, totalPages, onPageChange }) => {
-  const displayTotalPages = Math.max(totalPages, 9);
-
-  return (
-    <div className="decorative-pag">
-      <button
-        className="pag-arrow"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-
-      {[1, 2, 3].map(i => i <= displayTotalPages && (
-        <button
-          key={i}
-          className={`pag-num ${i === currentPage ? 'active' : ''}`}
-          onClick={() => onPageChange(i)}
-        >
-          {i}
-        </button>
-      ))}
-
-      {displayTotalPages > 3 && (
-        <>
-          <span className="pag-dots">...</span>
-          <button
-            className={`pag-num ${displayTotalPages === currentPage ? 'active' : ''}`}
-            onClick={() => onPageChange(displayTotalPages)}
-          >
-            {displayTotalPages}
-          </button>
-        </>
-      )}
-
-      <button
-        className="pag-arrow"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-    </div>
-  );
-};
-
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   if (totalPages <= 1) return null;
 
-  let startPage = Math.max(1, currentPage - 2);
-  let endPage = Math.min(totalPages, currentPage + 2);
+  const getPageNumbers = () => {
+    const pages = [];
+    
+    if (totalPages <= 1) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+      
+      if (currentPage > 2) {
+        pages.push('...');
+      }
+      
+      let start = Math.max(2, currentPage - 1);
+      let end = Math.min(totalPages - 1, currentPage + 1);
+      
+      for (let i = start; i <= end; i++) {
+        if (!pages.includes(i)) pages.push(i);
+      }
+      
+      if (currentPage < totalPages - 2) {
+        pages.push('...');
+      }
+      
+      if (!pages.includes(totalPages)) {
+        pages.push(totalPages);
+      }
+    }
+    
+    return pages;
+  };
+
+  const pageNumbers = getPageNumbers();
+  console.log('pageNumbers:', pageNumbers);
 
   return (
     <div className="pagination">
-      <button
-        className="page-arrow"
-        onClick={() => onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <button className="page-arrow" onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
       </button>
 
-      {startPage > 1 && (
-        <>
-          <button className="page-num" onClick={() => onPageChange(1)}>1</button>
-          {startPage > 2 && <span className="page-dots">...</span>}
-        </>
-      )}
+      {pageNumbers.map((page, index) => {
+        if (page === '...') {
+          return <span key={`dots-${index}`} className="pag-dots">...</span>;
+        }
+        return (
+          <button
+            key={page}
+            className={`page-num ${page === currentPage ? 'active' : ''}`}
+            onClick={() => onPageChange(page)}
+          >
+            {page}
+          </button>
+        );
+      })}
 
-      {Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i).map(page => (
-        <button
-          key={page}
-          className={`page-num ${page === currentPage ? 'active' : ''}`}
-          onClick={() => onPageChange(page)}
-        >
-          {page}
-        </button>
-      ))}
-
-      {endPage < totalPages && (
-        <>
-          {endPage < totalPages - 1 && <span className="page-dots">...</span>}
-          <button className="page-num" onClick={() => onPageChange(totalPages)}>{totalPages}</button>
-        </>
-      )}
-
-      <button
-        className="page-arrow"
-        onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <button className="page-arrow" onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
         </svg>
       </button>
@@ -157,8 +123,11 @@ const Gallery = ({ paintings, currentPage, totalPages, onPageChange }) => {
           </div>
         ))}
       </div>
-      <DecorativePagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+      <Pagination 
+        currentPage={currentPage} 
+        totalPages={totalPages} 
+        onPageChange={onPageChange} 
+      />
     </>
   );
 };

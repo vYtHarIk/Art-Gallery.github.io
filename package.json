@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "homepage": "https://vytharik.github.io/Art-Gallery.github.io",
   "scripts": {
-    "predeploy": "npm run build",
-  "deploy": "gh-pages -d dist -b main",
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist --dotfiles",
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview"
   },
   "repository": {
     "type": "git",

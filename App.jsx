@@ -15,16 +15,26 @@ function App() {
     yearTo: '',
     search: ''
   });
+  
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  const filteredPaintings = paintings.filter(p => {
-    if (filters.artist && p.artist !== filters.artist) return false;
-    if (filters.location && p.location !== filters.location) return false;
-    if (filters.yearFrom && p.year < parseInt(filters.yearFrom)) return false;
-    if (filters.yearTo && p.year > parseInt(filters.yearTo)) return false;
-    if (filters.search && !p.title.toLowerCase().includes(filters.search.toLowerCase()) &&
-        !p.artist.toLowerCase().includes(filters.search.toLowerCase())) return false;
+  const filteredPaintings = paintings.filter(painting => {
+    if (filters.artist && painting.artist !== filters.artist) return false;
+    
+    if (filters.location && painting.location !== filters.location) return false;
+    
+    if (filters.yearFrom && painting.year < parseInt(filters.yearFrom)) return false;
+    
+    if (filters.yearTo && painting.year > parseInt(filters.yearTo)) return false;
+    
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      const titleMatch = painting.title.toLowerCase().includes(searchLower);
+      const artistMatch = painting.artist.toLowerCase().includes(searchLower);
+      if (!titleMatch && !artistMatch) return false;
+    }
+    
     return true;
   });
 
@@ -34,6 +44,12 @@ function App() {
     currentPage * itemsPerPage
   );
 
+  const actualTotalPages = totalPages === 0 ? 1 : totalPages;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
@@ -42,12 +58,10 @@ function App() {
 
   const updateFilter = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }));
-    setCurrentPage(1);
   };
 
   const clearFilters = () => {
-    setFilters({ artist: '', location: '', yearFrom: '', yearTo: '', search: filters.search });
-    setCurrentPage(1);
+    setFilters({ artist: '', location: '', yearFrom: '', yearTo: '', search: '' });
   };
 
   const applyFilters = () => {
@@ -85,7 +99,7 @@ function App() {
       <Gallery
         paintings={paginatedPaintings}
         currentPage={currentPage}
-        totalPages={totalPages}
+        totalPages={actualTotalPages}
         onPageChange={goToPage}
       />
     </div>
