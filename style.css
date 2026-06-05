@@ -797,6 +797,17 @@ body.dark .mobile-arrow {
   transition: all 0.2s;
 }
 
+.years-inputs input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.years-inputs input[type="number"]::-webkit-inner-spin-button,
+.years-inputs input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .years-inputs input:focus{
   outline: none;
   border: 1px solid var(--border-light);
